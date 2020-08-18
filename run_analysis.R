@@ -33,13 +33,13 @@ names(train)
 # load subjects
 subjectsTrain <- read.table("UCI HAR Dataset/train/subject_train.txt",
                        header = FALSE, col.names = "subject_id")
-head(subjects)
-tail(subjects)
-dim(subjects)
+head(subjectsTrain)
+tail(subjectsTrain)
+dim(subjectsTrain)
 
 # cbind subject id's to training set
 if(!any(colnames(train) == "subject_id")) {
-    train <- cbind(subjects, train)
+    train <- cbind(subjectsTrain, train)
 }
 
 # load activities
@@ -78,7 +78,8 @@ if(!any(colnames(train) == "activity")) {
 }
 
 if(!any(colnames(train) == "setType")) {
-    train$setType = "train"
+    setType <- rep("train", nrow(train))
+    train <- cbind(setType, train)
 }
 
 
@@ -147,7 +148,8 @@ if(!any(colnames(test) == "activity")) {
 }
 
 if(!any(colnames(test) == "setType")) {
-    test$setType = "test"
+    setType <- rep("test", nrow(test))
+    test <- cbind(setType, test)
 }
 
 ### combine training and testing sets
@@ -155,6 +157,8 @@ dim(train)
 dim(test)
 combined <- rbind(train, test)
 dim(combined)
+
+tidyData <- write.table(combined, "tidyData.txt", sep = "\t", row.name = FALSE)
 
 ##############################################################################
 # Find mean and sd values
