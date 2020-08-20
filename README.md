@@ -1,6 +1,6 @@
 # Getting-and-Cleaning-Data-Course-Project
 
-This file describes the run_analysis.R script. Note, explicity details and arguments for every function are provided in the run_analysis.R script file.
+This file describes the run_analysis.R script. Note that explicit details and arguments for every function are provided in the run_analysis.R script file.
 
 ## Loading packages, creating directories, and downloading the data
 
@@ -19,7 +19,13 @@ Next, the subject ID's were loaded with read.table() from the subject_train.txt 
 
 The activity numbers were then loaded with read.table() from the y_train.txt dataset. Since these were numbers instead of decriptive labels, we then loaded the activity_labels.txt with read.table(). After turning these activity names to lowercase with tolower(), we used mutate() and case_when(), both from the dplyr package to rename the activity labels to readable values.
 
+## Combining data frames
+
 Afterwards, we added the activity labels to the training data with cbind(). Finally, we created a a a character vector named setType equal to "train". setType and train were merged together with cbind().
 
-After repeating the above steps for the testing dataset, the training and testing datasets were merged with rbind(). After combinining the data together, the combined file was exported as a .txt file with read.table().
+After repeating the above steps for the testing dataset, the training and testing datasets were merged with rbind(). The next step is to extract only mean or standard deviation values. Looking at the list of column names, we find that any value with a mean value will have the word "mean" in its name. Also, any value with a standard deviation will have "std" in its name. We can use regular expressions and grep() to locate those columns and create a meanMeasures and stdMeasures data frames. We can then cbind() those data frames, the subject ID's, activities, and set types. Finally, we can write a text file with the tidy data using write.table().
+
+## Writing the mean summary text file
+
+Lastly, we can find the mean value for each participant and for each activity by means of group_by() and summarize_each(). Results of this data frame are then written to a text file with write.table().
 

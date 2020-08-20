@@ -158,41 +158,27 @@ dim(test)
 combined <- rbind(train, test)
 dim(combined)
 
-tidyData <- write.table(combined, "tidyData.txt", sep = "\t", row.name = FALSE)
-
 ##############################################################################
-# Find mean and sd values
+# Extracts mean and sd values
 
-#### Mean
 meanMeasures <- combined[,grep("[mM]ean", colnames(combined))]
-meanMeasures <- cbind(combined$subject_id, combined$activity,
-                      combined$setType, meanMeasures)
-
-meanMeasures <- meanMeasures %>% 
+stdMeasures <- combined[,grep("[sS]td", colnames(combined))]
+meanStdMeasures <- cbind(meanMeasures, stdMeasures)
+meanStdMeasures <- cbind(combined$subject_id, combined$activity,
+                     combined$setType, meanStdMeasures)
+meanStdMeasures <- meanStdMeasures %>% 
     rename("subject_id" = "combined$subject_id",
            "activity" = "combined$activity",
            "set_type" = "combined$setType")
-colnames(meanMeasures)[1:3]
+colnames(meanStdMeasures)[1:3]
+
+write.table(meanStdMeasures, "tidyData.txt", sep = "\t", row.name = FALSE)
+
 
 #### mean summary
-meanSmry <- meanMeasures %>% 
+meanSmry <- meanStdMeasures %>% 
     group_by(activity, subject_id) %>% 
     summarize_each(funs(mean), -set_type)
 View(meanSmry)
 
-
-
-#### Std
-stdMeasures <- combined[,grep("[sS]td", colnames(combined))]
-stdMeasures <- cbind(combined$subject_id, combined$activity,
-                     combined$setType, stdMeasures)
-stdMeasures <- stdMeasures %>% 
-    rename("subject_id" = "combined$subject_id",
-           "activity" = "combined$activity",
-           "set_type" = "combined$setType")
-colnames(stdMeasures)[1:3]
-
-stdSmry <- stdMeasures %>% 
-    group_by(activity, subject_id) %>% 
-    summarize_each(funs(mean), -set_type)
-View(stdSmry)
+write.table(meanStdMeasures, "meanSmry.txt", sep = "\t", row.name = FALSE)
