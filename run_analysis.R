@@ -181,4 +181,4 @@ meanSmry <- meanStdMeasures %>%
     summarize_each(funs(mean), -set_type)
 View(meanSmry)
 
-write.table(meanStdMeasures, "meanSmry.txt", sep = "\t", row.name = FALSE)
+write.table(meanSmry, "meanSmry.txt", sep = "\t", row.name = FALSE)
